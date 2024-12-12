@@ -15,19 +15,21 @@ grid on;
 legend("Phi'(x)");
 
 b = -5;
-q = abs(b.*2 + log(2)./(2 .^b))./4
+q = -log(3) ./ ((2 .* 8.^0.25) .* 3 .^0.25 .* b);
 x0 = 0;
 counter = 0;
 
 eps = 10 .^ (-4)
 cont = true;
 
+
+
 printf("\n\n\nЗадание 1:\n");
 printf("Номер итерации: | Корень:  | Разность: | Tочность: \n")
 while cont
     counter++;
     x0last = x0;
-    x0 = (x0 .^2 - 0.5 .^x0 +3)./4;
+    x0 = (2 .* 3.^-x0).^0.25;
     if abs(x0 - x0last) <= (1-q)./q .* eps
         cont = false;
     endif;
@@ -36,25 +38,28 @@ while cont
 end;
 
 h3 = figure();
-df = -log(2)./(2.^x) - 2.^x + 4;
+df = 4 * x.^3 .* 3.^x + log(3) * x.^4 .* 3.^x;
 plot(x, df);
 legend("df(x)");
-m = -log(2)./(2.^ 0.85) - 2.^0.85 + 4;
-M = -log(2)./(2.^ 0.65) - 2.^0.65 + 4;
+m = 4 * 0.^3 .* 3.^0 + log(3) * 0.^4 .* 3.^0;
+M = 4 * -5.^3 .* 3.^-5 + log(3) * -5.^4 .* 3.^-5;
 
 eps = 10.^-6;
 alpha = 2 ./ (M + m);
 nq = (M - m) ./ (M + m);
-nx0 = 0.65;
+nx0 = -5;
 cont = true;
 ncounter = 0;
+
+
+
 
 printf("\n\n\nЗадание 2:\n");
 printf("Номер итерации: | Корень:  | Разность: | Tочность: \n");
 while cont
     ncounter++;
     nx0last = nx0;
-    nx0 = x0last - alpha .* (0.5 .^(x0last) -(x0last-2).^2+1);
+    nx0 = nx0last - alpha .* (nx0last.^4 .* 3.^nx0last - 2);
     if abs(nx0 - nx0last) <= (1-nq)./nq .* eps
         cont = false;
     endif;
@@ -62,16 +67,21 @@ while cont
     printf("\n %-14d | %7f | %9f | %9f \n", ncounter, nx0, abs(nx0 - nx0last), (1-nq)./nq .* eps);
 end;
 
+
+
+
 printf("\n\n\nЗадание 3:\n");
 cont = true;
 counter = 0;
-X0 = 0.65;
+X0 = -5;
 
 printf("Номер итерации: | Корень:  | Разность: | Tочность: \n")
 while cont
     X0last = X0;
     counter++;
-    X0 = X0last - (0.5 .^(X0last) -(X0last-2).^2+1) ./ (-log(2)./(2.^ X0last) - 2.^ X0last + 4);
+
+    X0 = X0last - (X0last.^4 .* 3.^X0last - 2) ./ (4 * X0last.^3 .* 3.^X0last + log(3) * X0last.^4 .* 3.^X0last)
+
     if abs(X0 - X0last) <= eps
         cont = false;
     endif;
